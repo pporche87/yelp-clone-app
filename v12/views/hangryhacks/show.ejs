@@ -1,0 +1,52 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Share a Hangry Hack</h3>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-text="Check out this Hangry Hack! " data-via="pporche87" data-hashtags="hangryhack" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%= hangryhack.image %>">
+                <div class="caption-full">
+                    <h4><a><%= hangryhack.name %></a></h4>
+                    <p><%= hangryhack.description %></p>
+                    <p>
+                        <em>Submitted By</em> <%= hangryhack.author.username %>
+                    </p>
+                    <% if(currentUser && hangryhack.author.id.equals(currentUser._id)){ %>
+                        <a class="btn btn-xs btn-warning" href="/hangryhacks/<%= hangryhack._id %>/edit">Edit</a>
+                        <form id="delete-form" action="/hangryhacks/<%= hangryhack._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-xs btn-danger">Delete</button>
+                        </form>
+                    <% } %>
+                </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/hangryhacks/<%= hangryhack._id %>/comments/new">Add New Comment</a>
+                </div>
+                <hr>
+                <% hangryhack.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author.username %></strong>
+                            <p>
+                                <%= comment.text %>
+                            </p>
+                            <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
+                                <a href="/hangryhacks/<%= hangryhack._id %>/comments/<%= comment._id %>/edit" class="btn btn-xs btn-warning">Edit</a>
+                                <form id="delete-form" action="/hangryhacks/<%= hangryhack._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                                    <button class="btn btn-xs btn-danger">Delete</button>
+                                </form>
+                             <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
